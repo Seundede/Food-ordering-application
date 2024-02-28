@@ -14,7 +14,11 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       style={tw`bg-white border border-white rounded-xl p-3 overflow-hidden`}
     >
       <Image
-        source={{ uri: product.image || '/' }}
+        source={{
+          uri:
+            product.image ||
+            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
+        }}
         style={tw`w-full aspect-square`}
         resizeMode="contain"
       />
