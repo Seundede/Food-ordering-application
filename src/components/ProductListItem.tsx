@@ -11,7 +11,7 @@ type ProductListItemProps = {
 const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <View
-      style={tw`bg-white border border-white rounded-xl p-3 overflow-hidden`}
+      style={tw`bg-white flex-1 max-w-1/2  border border-white rounded-xl p-3 overflow-hidden`}
     >
       <Image
         source={{
