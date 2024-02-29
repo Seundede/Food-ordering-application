@@ -10,6 +10,7 @@ export default function TabOneScreen() {
       <Stack.Screen
         options={{
           headerShown: false,
+          title: "Menu",
         }}
       />
       <FlatList

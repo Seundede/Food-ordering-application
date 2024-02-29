@@ -15,7 +15,8 @@ const ProductDetail = () => {
     <View style={tw`bg-white flex-1 p-3`}>
       <Stack.Screen
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: product.name,
         }}
       />
       <Image
