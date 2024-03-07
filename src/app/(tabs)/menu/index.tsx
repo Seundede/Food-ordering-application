@@ -9,7 +9,8 @@ export default function TabOneScreen() {
     <SafeAreaView>
       <Stack.Screen
         options={{
-          headerShown: false,
+          // headerShown: false,
+          headerShown: true,
           title: "Menu",
         }}
       />
