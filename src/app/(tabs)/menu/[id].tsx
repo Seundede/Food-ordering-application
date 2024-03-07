@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import products from "@/assets/data/products";
 import tw from "twrnc";
+import Button from "@/src/components/Button";
 
 const sizes = ["S", "M", "L", "XL"];
 const ProductDetail = () => {
@@ -11,6 +12,10 @@ const ProductDetail = () => {
   const product = products.find((p) => p.id.toString() == id);
   if (!product) {
     return <Text>Product not found</Text>;
+  }
+
+  const handleAddToCart =() => {
+    console.warn("Add to cart", selectedSize)
   }
   return (
     <View style={tw`bg-white flex-1 p-3`}>
@@ -51,7 +56,8 @@ const ProductDetail = () => {
           </Pressable>
         ))}
       </View>
-      <Text style={tw`text-lg font-bold`}>${product.price}</Text>
+      <Text style={tw`text-lg font-bold mt-auto`}>${product.price}</Text>
+      <Button onPress={handleAddToCart} text="Add to cart" />
     </View>
   );
 };

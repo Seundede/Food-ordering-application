@@ -10,7 +10,7 @@ const { tint } = Colors.light;
 const Button = forwardRef<View | null, ButtonProps>(
   ({ text, ...pressableProps }, ref) => {
     return (
-      <Pressable ref={ref} {...pressableProps} style={[tw`p-3 flex items-center rounded-md my-2`, { backgroundColor: tint }]}>
+      <Pressable ref={ref} {...pressableProps} style={[tw`p-3 flex items-center rounded-3xl my-2`, { backgroundColor: tint }]}>
         <Text style={tw`font-semibold text-white text-base`}>{text}</Text>
       </Pressable>
     );
