@@ -1,6 +1,6 @@
 import { Text, Image, View, Pressable } from "react-native";
 import React, { useContext, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import products from "@/assets/data/products";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
@@ -10,6 +10,7 @@ import { CartContext } from "@/src/providers/CartProvider";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetail = () => {
+  const router = useRouter()
   const { addItem } = useContext(CartContext);
   const { id } = useLocalSearchParams();
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
@@ -23,6 +24,7 @@ const ProductDetail = () => {
       return;
     }
     addItem(product, selectedSize);
+    router.push('/cart')
 
   };
   return (
