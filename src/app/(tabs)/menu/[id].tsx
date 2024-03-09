@@ -1,22 +1,30 @@
 import { Text, Image, View, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import products from "@/assets/data/products";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
 
-const sizes = ["S", "M", "L", "XL"];
+import { PizzaSize } from "@/src/types";
+import { CartContext } from "@/src/providers/CartProvider";
+
+const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetail = () => {
+  const { addItem } = useContext(CartContext);
   const { id } = useLocalSearchParams();
-  const [selectedSize, setSelectedSize] = useState("M");
+  const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
   const product = products.find((p) => p.id.toString() == id);
   if (!product) {
     return <Text>Product not found</Text>;
   }
 
-  const handleAddToCart =() => {
-    console.warn("Add to cart", selectedSize)
-  }
+  const addToCart = () => {
+    if (!product) {
+      return;
+    }
+    addItem(product, selectedSize);
+
+  };
   return (
     <View style={tw`bg-white flex-1 p-3`}>
       <Stack.Screen
@@ -57,7 +65,7 @@ const ProductDetail = () => {
         ))}
       </View>
       <Text style={tw`text-lg font-bold mt-auto`}>${product.price}</Text>
-      <Button onPress={handleAddToCart} text="Add to cart" />
+      <Button onPress={addToCart} text="Add to cart" />
     </View>
   );
 };
