@@ -3,15 +3,24 @@ import React from 'react'
 import tw from "twrnc";
 import Colors from "../constants/Colors";
 import { Product } from '../types';
-import { Link } from 'expo-router';
+import { Link, useSegments } from 'expo-router';
 
 const { tint } = Colors.light;
 type ProductListItemProps = {
     product: Product
 }
 const ProductListItem = ({ product }: ProductListItemProps) => {
+  const segments = useSegments() 
+
   return (
-    <Link href={`/menu/${product.id}`} asChild>
+    <Link
+      href={
+        segments[0] == "(admin)"
+          ? `/(admin)/menu/${product.id}`
+          : `/(user)/menu/${product.id}`
+      }
+      asChild
+    >
       <Pressable
         style={tw`bg-white flex-1 max-w-1/2  border border-white rounded-xl p-3 overflow-hidden`}
       >
