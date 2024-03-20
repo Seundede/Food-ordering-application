@@ -18,16 +18,20 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   return (
     <Link
       href={
-        segments[0] === "(admin)"
-          ? `/(admin)/orders/${order.id}`
+        segments[0] === "(user)"
+          ? `/(user)/orders/${order.id}`
           : `/(user)/orders/${order.id}`
       }
       asChild
     >
-      <Pressable style={tw`bg-white p-3 rounded-md flex-row justify-between items-center`}>
+      <Pressable
+        style={tw`bg-white p-3 rounded-md flex-row justify-between items-center`}
+      >
         <View>
           <Text style={tw`font-semibold my-2`}>Order #{order.id}</Text>
-          <Text style={tw`text-gray-300`}>{dayjs(order.created_at).fromNow()}</Text>
+          <Text style={tw`text-gray-300`}>
+            {dayjs(order.created_at).fromNow()}
+          </Text>
         </View>
 
         <Text style={tw`font-medium`}>{order.status}</Text>
