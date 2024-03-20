@@ -20,7 +20,7 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
       href={
         segments[0] === "(user)"
           ? `/(user)/orders/${order.id}`
-          : `/(user)/orders/${order.id}`
+          : `/(admin)/orders/${order.id}`
       }
       asChild
     >
