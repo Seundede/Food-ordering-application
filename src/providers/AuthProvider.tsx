@@ -16,13 +16,15 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean> (true)
   useEffect(() => {
-    console.log("mpunted");
     const fetchSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       setSession(data.session);
       setLoading(false)
     };
     fetchSession();
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
   }, []);
   return <AuthContext.Provider value={{session, loading}}>{children}</AuthContext.Provider>;
 }
