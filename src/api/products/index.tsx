@@ -1,7 +1,9 @@
-import { useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../../lib/supabase";
 import { Product } from "../../types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+//Function to get product from supabase
 export const useProductList = () => {
   return useQuery<Product[]>({
     queryKey: ["products"],
@@ -15,6 +17,7 @@ export const useProductList = () => {
   });
 };
 
+//Function to get product by id
 export const useProduct = (id: number) => {
   return useQuery<Product>({
     queryKey: ["product", id],
@@ -28,6 +31,33 @@ export const useProduct = (id: number) => {
         throw new Error(error.message);
       }
       return data;
+    },
+  });
+};
+
+//Function to create a product
+
+export const useInsertProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn(data: Omit<Product, "id">) {
+      const { error, data: newProduct } = await supabase
+        .from("products")
+        .insert({
+          name: data.name,
+          price: data.price,
+          image: data.image,
+        })
+        .single();
+
+      if (error) {
+        throw error;
+      }
+      return newProduct;
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 };

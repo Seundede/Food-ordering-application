@@ -4,14 +4,17 @@ import tw from "twrnc";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useInsertProduct } from "@/src/api/products";
 const create = () => {
+  const { mutate: insertProduct } = useInsertProduct();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const { id } = useLocalSearchParams();
   const { tint } = Colors.light;
+  const router = useRouter()
   const isUpdating = !!id;
   // Function to validate input fields
   const validateInput = () => {
@@ -43,6 +46,11 @@ const create = () => {
       setImage(result.assets[0].uri);
     }
   };
+  //Function to reset the input fields
+  const resetInputFields = () => {
+    setName("");
+    setPrice("");
+  };
   const onSubmit = () => {
     if (!validateInput()) {
       return;
@@ -52,23 +60,29 @@ const create = () => {
       console.warn("updating product");
     } else {
       // Create a product
-      console.log("Creating product", price);
-      setName("");
-      setPrice("");
+
+      insertProduct(
+        { name, price: parseFloat(price), image },
+        {
+          onSuccess: () => {
+            resetInputFields();
+            router.back()
+          },
+        }
+      );
     }
   };
-//Function to delete an entry
-const onDelete =() => {
-console.warn("Delete")
-}
-const handleDelete = () => {
-  Alert.alert("Confirm", "Are you sure you want to delete this product?",[
-    {text: "Cancel"},
-    {text:"Delete",
-  style:"destructive",
-onPress: onDelete}
-  ])
-}
+  //Function to delete an entry
+  const onDelete = () => {
+    console.warn("Delete");
+  };
+  const handleDelete = () => {
+    Alert.alert("Confirm", "Are you sure you want to delete this product?", [
+      { text: "Cancel" },
+      { text: "Delete", style: "destructive", onPress: onDelete },
+    ]);
+  };
+
   return (
     <View style={tw`flex-1 justify-center p-4`}>
       <Stack.Screen
@@ -105,7 +119,14 @@ onPress: onDelete}
       />
       <Text style={tw`text-red-500`}>{error}</Text>
       <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
-      {isUpdating && <Text onPress={handleDelete} style={tw`p-3 text-center mt-2 bg-white  rounded-3xl`}>Delete</Text>}
+      {isUpdating && (
+        <Text
+          onPress={handleDelete}
+          style={tw`p-3 text-center mt-2 bg-white  rounded-3xl`}
+        >
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
