@@ -16,7 +16,11 @@ const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
   return (
     <View style={tw`bg-white rounded-lg p-3 flex-1 items-center flex-row`}>
       <Image
-        source={{ uri: item.products.image || "" }}
+        source={{
+          uri:
+            item.products.image ||
+            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
+        }}
         style={tw`self-center mr-2 w-20 aspect-square`}
         resizeMode="contain"
       />

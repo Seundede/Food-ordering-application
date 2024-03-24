@@ -16,7 +16,11 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
   return (
     <View style={tw`bg-white rounded-xl p-2 flex-1 flex-row items-center`}>
       <Image
-        source={{ uri: cartItem.product.image || "" }}
+        source={{
+          uri:
+            cartItem.product.image ||
+            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
+        }}
         style={tw`aspect-square self-center w-28 mr-3`}
         resizeMode="contain"
       />

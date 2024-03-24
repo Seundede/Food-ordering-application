@@ -8,7 +8,7 @@ import tw from "twrnc";
 import Button from '../components/Button';
 
 const CartScreen = () => {
-  const { items, total } = useContext(CartContext);
+  const { items, total, checkout } = useContext(CartContext);
   return (
     <View style={tw`p-2`}>
       <FlatList
@@ -17,7 +17,7 @@ const CartScreen = () => {
         contentContainerStyle={{ gap: 10, padding: 10 }}
       />
       <Text style={tw`font-medium text-lg mt-10`}> Total: ${total}</Text>
-      <Button text='Checkout'/>
+      <Button text='Checkout' onPress={checkout}/>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
