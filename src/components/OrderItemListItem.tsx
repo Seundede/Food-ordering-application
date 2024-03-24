@@ -2,10 +2,11 @@ import { View, Text,  Image } from "react-native";
 import React from "react";
 import Colors from "../constants/Colors";
 import tw from "twrnc";
+import { Tables } from "../database.types";
 
 const { tint } = Colors.light;
 type OrderItemListItemProps = {
-  item: any;
+  item: {products : Tables<'products'> } & Tables<'order_items'>;
 };
 
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {

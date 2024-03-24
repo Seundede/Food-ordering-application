@@ -1,28 +1,35 @@
-import { View, Text, FlatList, Pressable, ActivityIndicator } from 'react-native'
-import React from 'react'
-import { Stack, useLocalSearchParams } from 'expo-router'
-import OrderListItem from '@/src/components/OrderListItem'
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
+import React from "react";
+import { Stack, useLocalSearchParams } from "expo-router";
+import OrderListItem from "@/src/components/OrderListItem";
 import tw from "twrnc";
-import OrderItemListItem from '@/src/components/OrderItemListItem'
-import { OrderStatusList } from '@/src/types'
-import Colors from '@/src/constants/Colors'
-import { useOrderDetails } from '@/src/api/orders'
-
+import OrderItemListItem from "@/src/components/OrderItemListItem";
+import { OrderStatusList } from "@/src/types";
+import Colors from "@/src/constants/Colors";
+import { useOrderDetails } from "@/src/api/orders";
+import { useUpdateOrder } from "@/src/api/order_item";
 
 const OrderDetail = () => {
-   const { id: idString } = useLocalSearchParams();
-   const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
+  const { mutate: updateOrder } = useUpdateOrder();
+  const { data: order, isLoading, error } = useOrderDetails(id);
 
-   const { data: order, isLoading, error } = useOrderDetails(id);
-
-   
   if (isLoading) {
     return <ActivityIndicator />;
   }
   if (error || !order) {
     return <Text>Failed to fetch</Text>;
   }
-
+const updataOrderStatus = (status) => {
+updateOrder({id, data: {status}})
+}
   return (
     <View style={tw`p-3 gap-4 flex-1`}>
       <Stack.Screen options={{ title: `Order #${id}` }} />
@@ -39,7 +46,7 @@ const OrderDetail = () => {
               {OrderStatusList.map((status) => (
                 <Pressable
                   key={status}
-                  onPress={() => console.warn("Update status")}
+                  onPress={() => updataOrderStatus(status)}
                   style={[
                     tw`border p-2 my-3`,
                     {
@@ -70,6 +77,6 @@ const OrderDetail = () => {
       />
     </View>
   );
-}
+};
 
-export default OrderDetail
+export default OrderDetail;
