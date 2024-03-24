@@ -1,5 +1,4 @@
 import { View, Text, TextInput, Image, Alert, TouchableOpacity, } from "react-native";
-import { Button as NativeButton } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
@@ -7,6 +6,7 @@ import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
+  useDeleteProduct,
   useInsertProduct,
   useProduct,
   useUpdateProduct,
@@ -16,6 +16,7 @@ const Create = () => {
   const { id } = useLocalSearchParams();
   const { mutate: insertProduct } = useInsertProduct();
   const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: deleteProduct } = useDeleteProduct()
   const { data: product } = useProduct(
     parseInt(typeof id === "string" ? id : id[0])
   );
@@ -87,7 +88,6 @@ const Create = () => {
       );
     } else {
       // Create a product
-
       insertProduct(
         { name, price: parseFloat(price), image },
         {
@@ -99,14 +99,20 @@ const Create = () => {
       );
     }
   };
+  
   //Function to delete an entry
-  const onDelete = () => {
-    console.warn("Delete");
-  };
   const handleDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product?", [
       { text: "Cancel" },
-      { text: "Delete", style: "destructive", onPress: onDelete },
+      { text: "Delete", style: "destructive", onPress: () => {
+         deleteProduct(Number(id), {
+           onSuccess: () => {
+             console.log("successs1");
+             resetInputFields();
+             router.replace("/(admin)");
+           },
+         });
+      } },
     ]);
   };
 

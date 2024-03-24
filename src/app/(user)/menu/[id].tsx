@@ -1,7 +1,6 @@
 import { Text, Image, View, Pressable, ActivityIndicator } from "react-native";
 import React, { useContext, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import products from "@/assets/data/products";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
 
