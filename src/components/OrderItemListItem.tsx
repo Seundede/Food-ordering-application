@@ -1,15 +1,18 @@
 import { View, Text,  Image } from "react-native";
 import React from "react";
 import Colors from "../constants/Colors";
-import { OrderItem } from "../types";
 import tw from "twrnc";
 
 const { tint } = Colors.light;
 type OrderItemListItemProps = {
-  item: OrderItem;
+  item: any;
 };
 
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
+   if (!item || !item.products) {
+     // Handle case where item or item.products is undefined
+     return <Text>Error: Product details not available</Text>;
+   }
   return (
     <View style={tw`bg-white rounded-lg p-3 flex-1 items-center flex-row`}>
       <Image
