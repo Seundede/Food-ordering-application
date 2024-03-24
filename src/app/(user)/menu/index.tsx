@@ -5,6 +5,8 @@ import { useProductList } from "@/src/api/products";
 import { Text } from "react-native";
 
 
+
+
 export default function MenuScreen() {
 
    const { data, isLoading, error } = useProductList();
@@ -23,6 +25,7 @@ export default function MenuScreen() {
           title: "Menu",
         }}
       />
+     
       <FlatList
         data={data}
         renderItem={({ item }) => <ProductListItem product={item} />}
