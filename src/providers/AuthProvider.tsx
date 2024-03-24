@@ -8,6 +8,15 @@ type AuthData = {
   profile: any;
   isAdmin: boolean
 };
+interface UserProfile {
+  avatar_url: string | null;
+  full_name: string | null;
+  group: string;
+  id: string;
+  updated_at: string | null;
+  username: string | null;
+  website: string | null;
+}
 
 export const AuthContext = createContext<AuthData>({
   session: null,
@@ -19,7 +28,7 @@ export const AuthContext = createContext<AuthData>({
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   useEffect(() => {
     const fetchSession = async () => {
       const {
@@ -35,7 +44,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
           .select("*")
           .eq("id", session.user.id)
           .single();
-        setProfile(data || null);
+        setProfile(data);
       }
       setLoading(false);
     };

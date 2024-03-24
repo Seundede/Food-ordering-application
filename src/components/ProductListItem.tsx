@@ -2,12 +2,12 @@ import {  Text, Image, Pressable } from 'react-native'
 import React from 'react'
 import tw from "twrnc";
 import Colors from "../constants/Colors";
-import { Product } from '../types';
 import { Link, useSegments } from 'expo-router';
+import { Tables } from '../database.types';
 
 const { tint } = Colors.light;
 type ProductListItemProps = {
-    product: Product
+    product: Tables<'products'>
 }
 const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments() 
