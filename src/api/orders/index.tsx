@@ -14,7 +14,8 @@ export const useAdminOrderList = ({ archived = false }) => {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .in("status", statuses);
+        .in("status", statuses)
+        .order("created_at", { ascending: false });
       if (error) {
         throw new Error(error.message);
       }
@@ -34,7 +35,8 @@ export const useUserOrderList = () => {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .eq("user_id", id);
+        .eq("user_id", id)
+        .order('created_at', {ascending:false})
       if (error) {
         throw new Error(error.message);
       }
@@ -82,7 +84,7 @@ export const useInsertOrder = () => {
       return newProduct;
     },
     async onSuccess(data) {
-      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 };
