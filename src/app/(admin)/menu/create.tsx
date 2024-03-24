@@ -1,20 +1,38 @@
-import { View, Text, TextInput, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import { View, Text, TextInput, Image, Alert, TouchableOpacity, } from "react-native";
+import { Button as NativeButton } from "react-native";
+import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useInsertProduct } from "@/src/api/products";
-const create = () => {
+import {
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/src/api/products";
+
+const Create = () => {
+  const { id } = useLocalSearchParams();
   const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: product } = useProduct(
+    parseInt(typeof id === "string" ? id : id[0])
+  );
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [error, setError] = useState("");
   const [image, setImage] = useState<string | null>(null);
-  const { id } = useLocalSearchParams();
+  useEffect(() => {
+    if (product) {
+      setImage(product.image);
+      setName(product.name);
+      setPrice(product.price.toString());
+    }
+  }, [product]);
+
   const { tint } = Colors.light;
-  const router = useRouter()
+  const router = useRouter();
   const isUpdating = !!id;
   // Function to validate input fields
   const validateInput = () => {
@@ -51,13 +69,22 @@ const create = () => {
     setName("");
     setPrice("");
   };
+
   const onSubmit = () => {
     if (!validateInput()) {
       return;
     }
     if (isUpdating) {
       // Update a product
-      console.warn("updating product");
+      updateProduct(
+        { id, name, price: parseFloat(price), image },
+        {
+          onSuccess: () => {
+            resetInputFields();
+            router.back();
+          },
+        }
+      );
     } else {
       // Create a product
 
@@ -66,7 +93,7 @@ const create = () => {
         {
           onSuccess: () => {
             resetInputFields();
-            router.back()
+            router.back();
           },
         }
       );
@@ -120,15 +147,16 @@ const create = () => {
       <Text style={tw`text-red-500`}>{error}</Text>
       <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
       {isUpdating && (
-        <Text
+       
+        <TouchableOpacity
           onPress={handleDelete}
-          style={tw`p-3 text-center mt-2 bg-white  rounded-3xl`}
+          style={tw`p-3 mt-2 bg-white  rounded-3xl`}
         >
-          Delete
-        </Text>
+          <Text style={tw`text-black text-center`}>Delete</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 };
 
-export default create;
+export default Create;

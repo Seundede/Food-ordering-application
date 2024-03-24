@@ -61,3 +61,37 @@ export const useInsertProduct = () => {
     },
   });
 };
+
+//Function to update a product
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn(data: any) {
+      const { data: updatedProduct, error } = await supabase
+        .from("products")
+        .update({
+          name: data.name,
+          price: data.price,
+          image: data.image,
+        })
+        .eq("id", data.id)
+        .select()
+        .single()
+
+      if (error) {
+        throw error;
+      }
+      return updatedProduct;
+    },
+    async onSuccess(_, { id }) {
+       console.log("Product updated successfully:", id);
+         await queryClient.invalidateQueries({ queryKey: ["product", id] });
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
+    
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
+};

@@ -1,7 +1,6 @@
 import { Text, Image, View, Pressable, ActivityIndicator } from "react-native";
 import React from "react";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
-import products from "@/assets/data/products";
 import tw from "twrnc";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
@@ -15,6 +14,7 @@ const ProductDetail = () => {
     data: product,
     isLoading,
     error,
+
   } = useProduct(parseInt(typeof id === "string" ? id : id[0]));
 
   if (isLoading) {
