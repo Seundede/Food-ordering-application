@@ -1,4 +1,11 @@
-import { View, Text, TextInput, Image, Alert, TouchableOpacity, } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import Button from "@/src/components/Button";
@@ -11,19 +18,26 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/src/api/products";
+import { randomUUID } from "expo-crypto";
+import { supabase } from "@/src/lib/supabase";
+import { decode } from "base64-arraybuffer";
+import * as FileSystem from 'expo-file-system'
 
 const Create = () => {
-  const { id } = useLocalSearchParams();
+  const [name, setName] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [image, setImage] = useState<string | null>(null);
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0]
+  );
+  const isUpdating = !!idString;
   const { mutate: insertProduct } = useInsertProduct();
   const { mutate: updateProduct } = useUpdateProduct();
-  const { mutate: deleteProduct } = useDeleteProduct()
-  const { data: product } = useProduct(
-    parseInt(typeof id === "string" ? id : id[0])
-  );
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [error, setError] = useState("");
-  const [image, setImage] = useState<string | null>(null);
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const { data: product } = useProduct(id);
+
   useEffect(() => {
     if (product) {
       setImage(product.image);
@@ -34,7 +48,7 @@ const Create = () => {
 
   const { tint } = Colors.light;
   const router = useRouter();
-  const isUpdating = !!id;
+
   // Function to validate input fields
   const validateInput = () => {
     setError("");
@@ -70,8 +84,26 @@ const Create = () => {
     setName("");
     setPrice("");
   };
+  // Function to upload the image to supabase
+  const uploadImage = async () => {
+    if (!image?.startsWith("file://")) {
+      return;
+    }
 
-  const onSubmit = () => {
+    const base64 = await FileSystem.readAsStringAsync(image, {
+      encoding: "base64",
+    });
+    const filePath = `${randomUUID()}.png`;
+    const contentType = "image/png";
+    const { data, error } = await supabase.storage
+      .from("product-images")
+      .upload(filePath, decode(base64), { contentType });
+
+    if (data) {
+      return data.path;
+    }
+  };
+  const onSubmit = async () => {
     if (!validateInput()) {
       return;
     }
@@ -87,9 +119,11 @@ const Create = () => {
         }
       );
     } else {
+      //Upload product image to supabse
+      const imagePath = await uploadImage()
       // Create a product
       insertProduct(
-        { name, price: parseFloat(price), image },
+        { name, price: parseFloat(price), image : imagePath },
         {
           onSuccess: () => {
             resetInputFields();
@@ -99,20 +133,24 @@ const Create = () => {
       );
     }
   };
-  
+
   //Function to delete an entry
   const handleDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product?", [
       { text: "Cancel" },
-      { text: "Delete", style: "destructive", onPress: () => {
-         deleteProduct(Number(id), {
-           onSuccess: () => {
-             console.log("successs1");
-             resetInputFields();
-             router.replace("/(admin)");
-           },
-         });
-      } },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          deleteProduct(Number(id), {
+            onSuccess: () => {
+              console.log("successs1");
+              resetInputFields();
+              router.replace("/(admin)");
+            },
+          });
+        },
+      },
     ]);
   };
 
@@ -153,7 +191,6 @@ const Create = () => {
       <Text style={tw`text-red-500`}>{error}</Text>
       <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
       {isUpdating && (
-       
         <TouchableOpacity
           onPress={handleDelete}
           style={tw`p-3 mt-2 bg-white  rounded-3xl`}
