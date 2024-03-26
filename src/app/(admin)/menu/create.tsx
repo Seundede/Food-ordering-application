@@ -119,8 +119,10 @@ const Create = () => {
         }
       );
     } else {
-      //Upload product image to supabse
+    
+    
       const imagePath = await uploadImage()
+ 
       // Create a product
       insertProduct(
         { name, price: parseFloat(price), image : imagePath },
@@ -129,8 +131,12 @@ const Create = () => {
             resetInputFields();
             router.back();
           },
+          onError: (error) => {
+            console.log(error)
+          }
         }
       );
+       
     }
   };
 
