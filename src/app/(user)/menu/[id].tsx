@@ -7,35 +7,33 @@ import Button from "@/src/components/Button";
 import { PizzaSize } from "@/src/types";
 import { CartContext } from "@/src/providers/CartProvider";
 import { useProduct } from "@/src/api/products";
-import DownloadImage from "@/src/components/DownloadImage";
+import RemoteImage from "@/src/components/RemoteImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetail = () => {
-  const router = useRouter()
+  const router = useRouter();
   const { addItem } = useContext(CartContext);
   const { id } = useLocalSearchParams();
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
- const {
-   data: product,
-   isLoading,
-   error,
- } = useProduct(parseInt(typeof id === "string" ? id : id[0]));
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useProduct(parseInt(typeof id === "string" ? id : id[0]));
 
- if (isLoading) {
-   return <ActivityIndicator />;
- }
- if (error || !product) {
-   return <Text>Failed to fetch product</Text>;
- }
-  
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error || !product) {
+    return <Text>Failed to fetch product</Text>;
+  }
 
   const addToCart = () => {
     if (!product) {
       return;
     }
     addItem(product, selectedSize);
-    router.push('/cart')
-
+    router.push("/cart");
   };
   return (
     <View style={tw`bg-white flex-1 p-3`}>
@@ -45,7 +43,7 @@ const ProductDetail = () => {
           title: product.name,
         }}
       />
-      <DownloadImage
+      <RemoteImage
         path={product.image}
         fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
         style={tw`w-full aspect-square`}

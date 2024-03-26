@@ -1,17 +1,17 @@
-import {  Text, Image, Pressable } from 'react-native'
-import React from 'react'
+import { Text, Image, Pressable } from "react-native";
+import React from "react";
 import tw from "twrnc";
 import Colors from "../constants/Colors";
-import { Link, useSegments } from 'expo-router';
-import { Tables } from '../database.types';
-import DownloadImage from './DownloadImage';
+import { Link, useSegments } from "expo-router";
+import { Tables } from "../database.types";
+import RemoteImage from "./RemoteImage";
 
 const { tint } = Colors.light;
 type ProductListItemProps = {
-    product: Tables<'products'>
-}
+  product: Tables<"products">;
+};
 const ProductListItem = ({ product }: ProductListItemProps) => {
-  const segments = useSegments() 
+  const segments = useSegments();
 
   return (
     <Link
@@ -25,7 +25,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       <Pressable
         style={tw`bg-white flex-1 max-w-1/2  border border-white rounded-xl p-3 overflow-hidden`}
       >
-        <DownloadImage
+        <RemoteImage
           path={product.image}
           fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
           style={tw`w-full aspect-square`}
@@ -40,4 +40,4 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   );
 };
 
-export default ProductListItem
+export default ProductListItem;

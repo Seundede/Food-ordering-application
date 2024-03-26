@@ -5,17 +5,14 @@ import tw from "twrnc";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
 import { useProduct } from "@/src/api/products";
-import DownloadImage from "@/src/components/DownloadImage";
-
+import RemoteImage from "@/src/components/RemoteImage";
 
 const ProductDetail = () => {
-
   const { id } = useLocalSearchParams();
   const {
     data: product,
     isLoading,
     error,
-
   } = useProduct(parseInt(typeof id === "string" ? id : id[0]));
 
   if (isLoading) {
@@ -24,9 +21,7 @@ const ProductDetail = () => {
   if (error || !product) {
     return <Text>Failed to fetch product</Text>;
   }
- 
 
- 
   return (
     <View style={tw`bg-white flex-1 p-3`}>
       <Stack.Screen
@@ -48,7 +43,7 @@ const ProductDetail = () => {
           ),
         }}
       />
-      <DownloadImage
+      <RemoteImage
         path={product.image}
         fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
         style={tw`w-full aspect-square`}

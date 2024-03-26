@@ -1,13 +1,17 @@
 import { Image } from "react-native";
-import React, { ComponentProps, useEffect, useMemo, useState } from "react";
+import React, { ComponentProps, useEffect,useState } from "react";
 import { supabase } from "../lib/supabase";
 
-type DownloadImageProps = {
+type RemoteImageProps = {
   path?: string | null;
   fallback: string;
 } & Omit<ComponentProps<typeof Image>, "source">;
 
-const DownloadImage = ({ path, fallback, ...imageProps }: DownloadImageProps) => {
+const RemoteImage = ({
+  path,
+  fallback,
+  ...imageProps
+}: RemoteImageProps) => {
   const [image, setImage] = useState("");
 
   useEffect(() => {
@@ -38,4 +42,4 @@ const DownloadImage = ({ path, fallback, ...imageProps }: DownloadImageProps) =>
   return <Image source={{ uri: image || fallback }} {...imageProps} />;
 };
 
-export default DownloadImage;
+export default RemoteImage;
