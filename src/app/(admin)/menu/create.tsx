@@ -107,10 +107,11 @@ const Create = () => {
     if (!validateInput()) {
       return;
     }
+         const imagePath = await uploadImage();
     if (isUpdating) {
       // Update a product
       updateProduct(
-        { id, name, price: parseFloat(price), image },
+        { id, name, price: parseFloat(price), image : imagePath },
         {
           onSuccess: () => {
             resetInputFields();
@@ -121,7 +122,7 @@ const Create = () => {
     } else {
     
     
-      const imagePath = await uploadImage()
+ 
  
       // Create a product
       insertProduct(
