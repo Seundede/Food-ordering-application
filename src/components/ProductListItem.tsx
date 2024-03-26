@@ -4,6 +4,7 @@ import tw from "twrnc";
 import Colors from "../constants/Colors";
 import { Link, useSegments } from 'expo-router';
 import { Tables } from '../database.types';
+import DownloadImage from './DownloadImage';
 
 const { tint } = Colors.light;
 type ProductListItemProps = {
@@ -24,12 +25,9 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       <Pressable
         style={tw`bg-white flex-1 max-w-1/2  border border-white rounded-xl p-3 overflow-hidden`}
       >
-        <Image
-          source={{
-            uri:
-              product.image ||
-              "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
-          }}
+        <DownloadImage
+          path={product.image}
+          fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
           style={tw`w-full aspect-square`}
           resizeMode="contain"
         />

@@ -5,6 +5,7 @@ import tw from "twrnc";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
 import { useProduct } from "@/src/api/products";
+import DownloadImage from "@/src/components/DownloadImage";
 
 
 const ProductDetail = () => {
@@ -28,9 +29,7 @@ const ProductDetail = () => {
  
   return (
     <View style={tw`bg-white flex-1 p-3`}>
-     
       <Stack.Screen
-
         options={{
           title: product.name,
           headerRight: () => (
@@ -49,12 +48,9 @@ const ProductDetail = () => {
           ),
         }}
       />
-      <Image
-        source={{
-          uri:
-            product.image ||
-            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
-        }}
+      <DownloadImage
+        path={product.image}
+        fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
         style={tw`w-full aspect-square`}
       />
 

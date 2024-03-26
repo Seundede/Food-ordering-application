@@ -7,6 +7,7 @@ import Button from "@/src/components/Button";
 import { PizzaSize } from "@/src/types";
 import { CartContext } from "@/src/providers/CartProvider";
 import { useProduct } from "@/src/api/products";
+import DownloadImage from "@/src/components/DownloadImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetail = () => {
@@ -44,12 +45,9 @@ const ProductDetail = () => {
           title: product.name,
         }}
       />
-      <Image
-        source={{
-          uri:
-            product.image ||
-            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
-        }}
+      <DownloadImage
+        path={product.image}
+        fallback="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
         style={tw`w-full aspect-square`}
       />
       <Text style={tw`text-base`}>Select Size</Text>
