@@ -5,6 +5,7 @@ import { Tables } from "../database.types";
 import { useInsertOrder } from "../api/orders";
 import { useRouter } from "expo-router";
 import { useInsertOrderItems } from "../api/order_item";
+import { initialisePaymentSheet, openPaymentSheet } from "../lib/stripe";
 
 // Type for the context value
 interface CartContextType {
@@ -66,8 +67,13 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setItems([]);
   };
   const { mutate } = useInsertOrder();
-  const checkout = () => {
-  
+  const checkout = async () => {
+ initialisePaymentSheet(Math.floor(total * 100))
+    const status = await openPaymentSheet();
+     if (!status) {
+       console.error("Error initializing payment sheet");
+       return;
+     }
     mutate(
       { total },
       {
