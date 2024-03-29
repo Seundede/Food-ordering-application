@@ -13,13 +13,10 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 import CartProvider from "../providers/CartProvider";
 import AuthProvider from "../providers/AuthProvider";
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-
+import { StripeProvider } from "@stripe/stripe-react-native";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -64,19 +61,23 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <CartProvider>
-            <AuthProvider></AuthProvider>
-            <Stack>
-              <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-              <Stack.Screen name="(user)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="cart" options={{ presentation: "modal" }} />
-            </Stack>
-          </CartProvider>
-        </QueryClientProvider>
-      </AuthProvider>
+      <StripeProvider
+        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
+      >
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <CartProvider>
+              <AuthProvider></AuthProvider>
+              <Stack>
+                <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+                <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="cart" options={{ presentation: "modal" }} />
+              </Stack>
+            </CartProvider>
+          </QueryClientProvider>
+        </AuthProvider>
+      </StripeProvider>
     </ThemeProvider>
   );
 }
