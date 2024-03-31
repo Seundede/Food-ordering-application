@@ -16,10 +16,10 @@ serve(async (req: Request) => {
     const customer = await createOrRetrieveProfile(req);
 
     // Create an ephermeralKey so that the Stripe SDK can fetch the customer's stored payment methods.
-    // const ephemeralKey = await stripe.ephemeralKeys.create(
-    //   { customer: customer },
-    //   { apiVersion: "2020-08-27" }
-    // );
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      { customer: customer },
+      { apiVersion: "2020-08-27" }
+    );
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
@@ -30,8 +30,8 @@ serve(async (req: Request) => {
     const res = {
       paymentIntent: paymentIntent.client_secret,
       publishableKey: Deno.env.get("EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
-      // customer: customer,
-      // ephemeralKey: ephemeralKey.secret,
+      customer: customer,
+      ephemeralKey: ephemeralKey.secret,
     };
 
     return new Response(JSON.stringify(res), {

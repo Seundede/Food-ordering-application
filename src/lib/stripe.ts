@@ -33,6 +33,7 @@ export const initialisePaymentSheet = async (amount: number) => {
     defaultBillingDetails: {
       name: "Jane Doe",
     },
+    returnURL: "your-app-scheme://payment",
   });
 
 };
