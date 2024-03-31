@@ -6,11 +6,11 @@ import {
 } from "@stripe/stripe-react-native";
 
 const fetchPaymentSheetParams = async (amount: number) => {
-  const { data, errpr } = await supabase.functions.invoke("payment-sheet", {
+  const { data, error } = await supabase.functions.invoke("payment-sheet", {
     body: { amount },
   });
   if (data) {
-    console.log(data);
+
     return data;
   }
   Alert.alert("Error fetching payment sheet params");
@@ -18,7 +18,7 @@ const fetchPaymentSheetParams = async (amount: number) => {
 };
 
 export const initialisePaymentSheet = async (amount: number) => {
-  console.log("Initialising payment sheet, for: ", amount);
+
 
   const { paymentIntent, publishableKey, customer, ephemeralKey } =
     await fetchPaymentSheetParams(amount);
@@ -34,7 +34,7 @@ export const initialisePaymentSheet = async (amount: number) => {
       name: "Jane Doe",
     },
   });
-  console.log(result);
+
 };
 
 export const openPaymentSheet = async () => {

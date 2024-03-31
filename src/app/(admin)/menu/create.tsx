@@ -152,7 +152,7 @@ const Create = () => {
         onPress: () => {
           deleteProduct(Number(id), {
             onSuccess: () => {
-              console.log("successs1");
+      
               resetInputFields();
               router.replace("/(admin)");
             },

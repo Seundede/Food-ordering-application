@@ -7,7 +7,7 @@ import { stripe } from "../_utils/stripe.ts";
 import { createOrRetrieveProfile } from "../_utils/supabase.ts";
 // import { createOrRetrieveProfile } from "../_utils/supabase.ts";
 
-console.log("Hello from Functions!");
+
 
 serve(async (req: Request) => {
   try {
