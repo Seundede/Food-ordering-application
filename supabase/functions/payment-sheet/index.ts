@@ -4,6 +4,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { stripe } from "../_utils/stripe.ts";
+import { createOrRetrieveProfile } from "../_utils/supabase.ts";
 // import { createOrRetrieveProfile } from "../_utils/supabase.ts";
 
 console.log("Hello from Functions!");
@@ -12,7 +13,7 @@ serve(async (req: Request) => {
   try {
     const { amount } = await req.json();
 
-    // const customer = await createOrRetrieveProfile(req);
+    const customer = await createOrRetrieveProfile(req);
 
     // Create an ephermeralKey so that the Stripe SDK can fetch the customer's stored payment methods.
     // const ephemeralKey = await stripe.ephemeralKeys.create(
@@ -23,7 +24,7 @@ serve(async (req: Request) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
       currency: "usd",
-      // customer: customer,
+      customer: customer,
     });
 
     const res = {
